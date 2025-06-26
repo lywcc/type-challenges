@@ -19,7 +19,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type AnyOf<T extends readonly any[]> = any
+type Falsely = '' | 0 | false | [] | undefined | null
+
+type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer Rest]
+  ? F extends Falsely
+    ? AnyOf<Rest>
+    : [F] extends [{}] ?
+        keyof F extends never
+          ? AnyOf<Rest>
+          : true
+        : true
+  : false
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

@@ -23,11 +23,24 @@
 */
 
 /* _____________ Your Code Here _____________ */
-type Cap = 'A' | 'B' | 'C' |  'F'
+// type UppercaseLetters =
+//   'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' |
+//   'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' |
+//   'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
 
-type KebabCase<S extends string, Flag extends boolean = true> = S extends `${infer F}${infer Rest}` ? F extends Cap 
-  F extrean
-:  ''
+// type KebabCase<S extends string, Flag extends boolean = true> = S extends `${infer F}${infer Rest}` ? F extends UppercaseLetters ? Flag extends true ? `${Lowercase<F>}${KebabCase<Rest, false>}` : `-${Lowercase<F>}${KebabCase<Rest, false>}`
+//   : `${F}${KebabCase<Rest, false>}`
+//   : S
+type KebabCase<S extends string, Flag extends boolean = true> =
+  S extends `${infer F}${infer Rest}` ?
+    F extends Uppercase<F>
+      ? F extends Lowercase<F> // 排除 - 这些非字母字符的干扰
+        ? `${F}${KebabCase<Rest, false>}`
+        : Flag extends true
+          ? `${Lowercase<F>}${KebabCase<Rest, false>}`
+          : `-${Lowercase<F>}${KebabCase<Rest, false>}`
+      : `${F}${KebabCase<Rest, false>}`
+    : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

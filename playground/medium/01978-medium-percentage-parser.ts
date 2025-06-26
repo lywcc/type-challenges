@@ -32,7 +32,33 @@
 
 /* _____________ Your Code Here _____________ */
 
-type PercentageParser<A extends string> = any
+// 方式1
+
+// type PercentageParser<A extends string > = A extends `${infer F}${infer R}%` ?
+//   F extends '+' | '-' ? [F, R, '%'] : ['', `${F}${R}`, '%'] :
+//   A extends `${infer F}%` ? ['', `${F}`, '%']
+//     : A extends `${infer F}${infer R}` ? F extends '+' | '-' ? [F, R, ''] : ['', `${F}${R}`, ''] :
+//         ['', '', '']
+
+// 方式2
+
+type A = '' extends `${infer F}${string}` ? true : false // false
+type B = ' ' extends `${infer F}${string}` ? true : false // true
+
+// 解析符号部分
+type ParseSign<S extends string> = S extends `${infer F}${string}` ? F extends '+' | '-' ? F : '' : ''
+// 解析%部分
+type ParsePercent<S extends string> = S extends `${string}%` ? '%' : ''
+
+// 解析中间部分
+
+type ParseNumber<S extends string> = S extends `${infer F}${infer R}` ?
+  F extends '+' | '-' ? R extends `${infer N}%` ? N : R : S extends `${infer N}%` ? N : S
+  : ''
+
+// 组合三个部分
+
+type PercentageParser<S extends string> = [ParseSign<S>, ParseNumber<S>, ParsePercent<S>]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

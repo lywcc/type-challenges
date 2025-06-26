@@ -23,7 +23,19 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RemoveIndexSignature<T> = any
+// 方式1
+
+type RemoveIndexSignature<T extends object> = {
+  [K in keyof T as string extends K ? never : number extends K ? never : symbol extends K ? never : K]: T[K]
+}
+
+// type IndexSignatureKey<T> = string extends T ? true : number extends T ? true : symbol extends T ? true : false
+
+// 方式2
+
+// type RemoveIndexSignature<T> = {
+//   [K in keyof T as IndexSignatureKey<K> extends true ? never : K]: T[K]
+// }
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

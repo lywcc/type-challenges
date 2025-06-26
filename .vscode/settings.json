@@ -62,5 +62,6 @@
   "augment.nextEdit.enableBackgroundSuggestions": false,
   "augment.nextEdit.enableAutoApply": false,
   "typescript.suggest.objectLiteralMethodSnippets.enabled": true,
-  "inlineChat.lineNaturalLanguageHint": false
+  "inlineChat.lineNaturalLanguageHint": false,
+  "augment.completions.enableAutomaticCompletions": false
 }

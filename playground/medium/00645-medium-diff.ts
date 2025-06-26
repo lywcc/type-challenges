@@ -12,7 +12,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Diff<O, O1> = any
+type Diff<O extends object, O1 extends object> = {
+  [K in keyof (O & O1) as K extends keyof O & keyof O1 ? never : K ]:
+  K extends keyof O ? O[K] : K extends keyof O1 ? O1[K] : never
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

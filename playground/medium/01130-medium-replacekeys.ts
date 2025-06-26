@@ -45,7 +45,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ReplaceKeys<U, T, Y> = any
+type ReplaceKeys<U, T extends string | number | symbol, Y> = U extends infer V ?
+    {
+      [K in keyof V]: K extends T ? K extends keyof Y ? Y[K] : never : V[K]
+    }
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
