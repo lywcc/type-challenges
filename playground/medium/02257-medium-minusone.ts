@@ -19,7 +19,28 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MinusOne<T extends number> = any
+type DigitMap = {
+  '0': '9'
+  '1': '0'
+  '2': '1'
+  '3': '2'
+  '4': '3'
+  '5': '4'
+  '6': '5'
+  '7': '6'
+  '8': '7'
+  '9': '8'
+}
+
+type ReverseStr< T extends string, Res extends string = ''> = T extends `${infer F}${infer Rest}` ? `${ReverseStr<Rest, `${F}${Res}`>}` : Res
+
+type GetMinusStr<T extends string> = T extends `${infer F extends keyof DigitMap}${infer R}` ? F extends '0' ? `${DigitMap[F]}${GetMinusStr<R>}` : `${DigitMap[F]}${R}` : T
+
+type ExcludeZero<T extends string> = T extends '0' ? '0' : T extends `0${infer R}` ? ExcludeZero<R> : T
+
+type StringToNumber<T extends string> = T extends `${infer F extends number}` ? F : never
+
+type MinusOne<T extends number> = StringToNumber<ExcludeZero<ReverseStr<GetMinusStr<ReverseStr<`${T}`>>>>>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

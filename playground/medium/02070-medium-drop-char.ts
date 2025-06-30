@@ -18,7 +18,13 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DropChar<S, C> = any
+ type A = ' ' extends '' ? true : false
+
+// type DropChar<S extends string, C extends string> = S extends `${infer F}${infer Rest}` ?
+//   F extends C ?  `${DropChar<Rest, C>}`  : `${F}${DropChar<Rest, C>}`
+//   : ''
+
+type DropChar<S extends string, C extends string, R extends string = ''> = S extends `${infer F}${infer Rest}` ? F extends C ? `${DropChar<Rest, C, `${R}`>}` : `${DropChar<Rest, C, `${R}${F}`>}` : R
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
