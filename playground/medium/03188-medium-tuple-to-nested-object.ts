@@ -18,7 +18,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TupleToNestedObject<T, U> = any
+// type TupleToNestedObject<T extends string[], U> = T extends [infer F extends string, ...infer R extends string[]] ? {
+//   [K in F]: TupleToNestedObject<R, U>
+// } : U
+type TupleToNestedObject<T extends string[], U, R = U> = T extends [...infer Res extends string[], infer L extends string] ? TupleToNestedObject<Res, U, {
+  [K in L]: R
+}> : R
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

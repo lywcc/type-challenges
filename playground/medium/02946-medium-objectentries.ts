@@ -23,7 +23,25 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ObjectEntries<T> = any
+// type F = undefined extends undefined ? 1 : 2
+
+// type Obj = { name?: undefined }
+// type Obj1 = Required<Obj> // {name: never}
+
+// type MyRequired<O extends object> = {
+//   [K in keyof O]-?: O[K] extends undefined ? undefined : O[K]
+// }
+
+// type Obj2 = MyRequired<Obj> // {name: never}
+
+// TODO 为啥不能过 {name: never}
+// type ObjectEntries<T extends object> = keyof T extends infer K ?
+//   K extends keyof T ? {} extends Pick<T, K> ? T[K] extends undefined ? [K, T[K]] : [K, Required<T>[K]] : [K, T[K]] : never
+//   : never
+
+type ObjectEntries<T extends object> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? T[K] extends undefined ? [K, T[K]] : [K, Required<T>[K]] : [K, T[K]]
+}[keyof T]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -35,6 +53,8 @@ interface Model {
 }
 
 type ModelEntries = ['name', string] | ['age', number] | ['locations', string[] | null]
+
+type A1 = ObjectEntries<{ key?: undefined }>
 
 type cases = [
   Expect<Equal<ObjectEntries<Model>, ModelEntries>>,

@@ -27,7 +27,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RequiredByKeys<T, K> = any
+type Intersection<T extends object> = {
+  [K in keyof T]: T[K]
+}
+
+type RequiredByKeys<T extends object, U extends keyof T = keyof T> = Intersection<Omit<T, U> & Required<Pick<T, U>>>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

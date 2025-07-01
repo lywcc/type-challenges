@@ -26,7 +26,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type PartialByKeys<T, K> = any
+// type PartialByKeys<T extends Record<string, any>, U extends keyof T = keyof T> = {
+//   [K in keyof T as K extends U ? never : K]: T[K]
+// } & {
+//   [K in keyof T as K extends U ? K : never]?: T[K]
+// } extends infer O ? { [P in keyof O]: O[P] } : never
+type Intersection<T extends object> = {
+  [K in keyof T]: T[K]
+}
+
+type PartialByKeys<T extends object, U extends keyof T = keyof T> = Intersection<Omit<T, U> & Partial<Pick<T, U>>>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
